@@ -13,10 +13,6 @@
         </div>
       </code>
     </pre>
-    <pre>
-      <code>
-      </code>
-    </pre>
   </div>
 </template>
 
@@ -140,7 +136,7 @@ oo  o      oo       o    o  ooooo   oo  oo   oo}
       let message = CFonts.render(`${moment(christmas).diff(now, 'seconds')}`, opts).string
       if (moment(now).diff(christmas) >= 0) {
         message = CFonts.render('Feliz', opts).string
-        message = '\n' + CFonts.render('Navidad!!!', opts).string
+        message = message + '\n' + CFonts.render('Navidad!', opts).string
       }
       this.time = message
     },
