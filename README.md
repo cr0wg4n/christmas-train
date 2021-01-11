@@ -1,5 +1,6 @@
 # christmas-train
-
+## Demo
+[Demo preview](https://elegant-williams-36448a.netlify.app/) hosted by netlify :D.
 ## Project setup
 ```
 npm install
@@ -19,6 +20,3 @@ npm run build
 ```
 npm run lint
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
