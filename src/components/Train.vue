@@ -1,10 +1,12 @@
 <template>
   <div>
-    <pre>
-      <code>
-        {{ time }}
-      </code>
-    </pre>
+    <div style="margin-left: 35%">
+      <pre>
+        <code>
+          {{ time }}
+        </code>
+      </pre>
+    </div>
     <pre>
       <code>
         {{ animateTrain }}
@@ -27,7 +29,7 @@ export default {
       spriteCounter: 0,
       offset: 4,
       counter: 0,
-      limit: 250,
+      limit: 195,
       rails: '_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ ',
       train: `
 o        o      o    o   o   o   oo  oo  oo  oo}
@@ -127,16 +129,19 @@ oo  o      oo       o    o  ooooo   oo  oo   oo}
   },
   methods: {
     async updateTime () {
-      const christmas = moment(new Date("2020-12-25 00:00:00"))
+
       const now = new Date()
+      const year = now.getFullYear()
+      const christmas = moment(new Date(`${year}-12-25 00:00:00`))
       const opts = {
         align: 'left',
         font: 'simpleblock',
       }
-      let message = CFonts.render(`${moment(christmas).diff(now, 'seconds')}`, opts).string
-      if (moment(now).diff(christmas) >= 0) {
-        message = CFonts.render('Feliz', opts).string
-        message = message + '\n' + CFonts.render('Navidad!', opts).string
+      let message = this.render(`${moment(christmas).diff(now, 'seconds')}`, opts)
+      const diff = moment(now).diff(christmas)
+      if (diff >= 0 && diff <= 25200) {
+        message = this.render('Feliz', opts)
+        message = message + '\n' + this.render('Navidad!', opts)
       }
       this.time = message
     },
@@ -165,6 +170,9 @@ oo  o      oo       o    o  ooooo   oo  oo   oo}
         result = result + '\n' + lines[index]
       }
       return result
+    },
+    render (text, opts) {
+      return CFonts.render(text, opts).string
     }
   }
 }
