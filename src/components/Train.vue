@@ -53,6 +53,7 @@ export default {
     }
   },
   created () {
+    this.updateTime()
     this.updateTrainSpriteInterval = setInterval(() => {
       this.updateTrainSprite()
     }, 400)
