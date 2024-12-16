@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div style="margin-left: 35%">
+    <div>
       <pre>
         <code>
-          {{ time }}
+{{ time }}
         </code>
       </pre>
     </div>
@@ -19,8 +19,9 @@
 </template>
 
 <script>
-const CFonts = require('cfonts')
+import { render } from 'cfonts'
 import moment from 'moment'
+import { train, sprites } from './sprites'
 
 export default {
   data() {
@@ -30,81 +31,16 @@ export default {
       offset: 4,
       counter: 0,
       limit: 195,
-      rails: '_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ ',
-      train: `
-o        o      o    o   o   o   oo  oo  oo  oo}
-    o     o  oo  ooo  oo  ooo ooo  ooo ooo ooo oooooo}
-                  oo  oo   oo  oo  ooo ooo ooo oooo ooooo}
-                        o    o   o   oo  oo  oo  oooo oooooo}
-                                        o   o   o   ooo  oo ooooo}
-                                                            o ooo}
-                                _________            \\|/         ++
-                    ___________ |_______|______/-\\___|-|_^_/-\\___||_n
-            n_____/    OOO    \\_ |[][] |----------------------|----|\\
-            |          (_)      ||     |______________________|_|| ||P
-            |          OOO      | -----/====+______|| _---====--||- /
-            q|===================|_|=_/o====+|=====[__]o====+|==[__]-p\\
-              (_)(_)      (_)(_)      \\__/ \\__/ \\__/  \\__/ \\__/ (_)____\\
-      `,
-      sprites: [`
-o        o      o    o   o   o   oo  oo  oo  oo}
-    o     o  oo  ooo  oo  ooo ooo  ooo ooo ooo oooooo}
-                  oo  oo   oo  oo  ooo ooo ooo oooo ooooo}
-                        o    o   o   oo  oo  oo  oooo oooooo}
-                                        o   o   o   ooo  oo ooooo}
-                                                            o ooo}
-                                _________            \\|/         ++
-                    ___________ |_______|______/-\\___|-|_^_/-\\___||_n
-            n_____/    OOO    \\_ |[][] |----------------------|----|\\
-            |          (_)      ||     |______________________|_|| ||P
-            |          OOO      | -----/====+______|| _---====--||- /
-            q|===================|_|=_/o====+|=====[__]o====+|==[__]-p\\
-              (_)(_)      (_)(_)      \\__/ \\__/ \\__/  \\__/ \\__/ (_)____\\
-      `,`
-        o      o    o          oo  oo  oo  oo}
-    o     o  oo     oo                oo ooo oooo  }
-                  oo  oo   oo  oo  o   oo ooo oooo ooooo}
-                        o    o   o   o   oo            ooooo}
-                                        o   o   o     o  oo ooo}
-                                                        o      oo}
-                                _________            \\|/         ++
-                    ___________ |_______|______/-\\___|-|_^_/-\\___||_n
-            n_____/    OOO    \\_ |[][] |----------------------|----|\\
-            |          (_)      ||     |______________________|_|| ||P
-            |          OOO      | -----/====+______|| _---====--||- /
-            q|===================|_|=_/o====+|=====[__]o====+|==[__]-p\\
-              (_)(_)      (_)(_)      \\__/ \\__/ \\__/  \\__/ \\__/ (_)____\\
-      `, `
-o        o      o    o  ooooo   oo  oo   oo}
-          o  oo     oo       oooo      oo ooo o o }
-                  oo  oo   oo  oo  o   oo oo     ooo  o}
-                        o    o   o   oo  oo            ooooo}
-                                    o        o   o   ooo  oo oo}
-                                                            o o  }
-                                _________            \\|/         ++
-                    ___________ |_______|______/-\\___|-|_^_/-\\___||_n
-            n_____/    OOO    \\_ |[][] |----------------------|----|\\
-            |          (_)      ||     |______________________|_|| ||P
-            |          OOO      | -----/====+______|| _---====--||- /
-            q|===================|_|=_/o====+|=====[__]o====+|==[__]-p\\
-              (_)(_)      (_)(_)      \\__/ \\__/ \\__/  \\__/ \\__/ (_)____\\
-      `,`
-oo  o      oo       o    o  ooooo   oo  oo   oo}
-          o  oo     oo       ooooo o o o o     o o }
-              o o     oooo   oo  oo  o   oo oo     oo o}
-                        o    o   o   oo  oo        o      o}
-                                    o        o   o   ooo  oo oo}
-                                                            o o  }
-                                _________            \\|/         ++
-                    ___________ |_______|______/-\\___|-|_^_/-\\___||_n
-            n_____/    OOO    \\_ |[][] |----------------------|----|\\
-            |          (_)      ||     |______________________|_|| ||P
-            |          OOO      | -----/====+______|| _---====--||- /
-            q|===================|_|=_/o====+|=====[__]o====+|==[__]-p\\
-              (_)(_)      (_)(_)      \\__/ \\__/ \\__/  \\__/ \\__/ (_)____\\
-      `
-      ]
-   }
+      rails: new Array(125).fill('_ ').join(''),
+      train,
+      sprites,
+      updateTrainSpriteInterval: null, 
+      updateTimeInterval: null, 
+      opts: {
+        align: 'left',
+        font: 'simpleblock'
+      }
+    }
   },
   computed: {
     animateTrain () {
@@ -117,31 +53,28 @@ oo  o      oo       o    o  ooooo   oo  oo   oo}
     }
   },
   created () {
-    setInterval(() => {
-      this.updateTrain()
-    }, 1000)
-    setInterval(() => {
+    this.updateTrainSpriteInterval = setInterval(() => {
       this.updateTrainSprite()
-    }, 500)
-    setInterval(() => {
+    }, 400)
+    this.updateTimeInterval = setInterval(() => {
+      this.updateTrain()
       this.updateTime()
     }, 1000)
   },
+  destroyed () {
+    clearInterval(this.updateTrainSpriteInterval)
+    clearInterval(this.updateTimeInterval)
+  },
   methods: {
     async updateTime () {
-
       const now = new Date()
       const year = now.getFullYear()
       const christmas = moment(new Date(`${year}-12-25 00:00:00`))
-      const opts = {
-        align: 'left',
-        font: 'simpleblock',
-      }
-      let message = this.render(`${moment(christmas).diff(now, 'seconds')}`, opts)
+      let message = this.render(`${moment(christmas).diff(now, 'seconds')}`, this.opts)
       const diff = moment(now).diff(christmas)
-      if (diff >= 0 && diff <= 25200) {
-        message = this.render('Feliz', opts)
-        message = message + '\n' + this.render('Navidad!', opts)
+      if (diff >= 0 && diff <= 25200000) {
+        message = this.render('Feliz', this.opts)
+        message = message + '\n' + this.render('Navidad!', this.opts)
       }
       this.time = message
     },
@@ -172,7 +105,7 @@ oo  o      oo       o    o  ooooo   oo  oo   oo}
       return result
     },
     render (text, opts) {
-      return CFonts.render(text, opts).string
+      return render(text, opts).string
     }
   }
 }
